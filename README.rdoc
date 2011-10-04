@@ -1,0 +1,14 @@
+== HAStats -- An HAProxy socket tool for Ruby
+
+HAStats communicates with a running HAProxy process through the "stats socket" (not enabled by default).  Through this socket you can query stats, reset counters, change server weightings, put servers in maintenance mode, and more.
+
+=== Using the command line tool
+
+  $ hastats info
+    Name: HAProxy
+    Version: 1.4.8
+    Release_date: 2010/06/16
+    Nbproc: 1
+    Process_num: 1
+    ...
+

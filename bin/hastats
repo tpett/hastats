@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'hastats'
+require 'thor'
+
+class HAStats::Bin < Thor
+  map %w(-h --help) => :help
+  class_option :socket, :aliases => %w(-s), :default => '/usr/local/var/run/haproxy.sock'
+  class_option :json, :aliases => %w(-j), :type => :boolean, :default => false, :desc => "Return results in JSON for easy parsing"
+
+  desc 'info', 'Get information about the HAProxy process'
+  def info
+    print_result HAStats::Actions::Info.new(options[:socket]).run
+  end
+
+  desc 'stat', 'Get information about all frontends/backends/servers'
+  def stat
+    print_result HAStats::Actions::Stat.new(options[:socket]).run
+  end
+
+  desc 'disable [BACKEND] [SERVER]', 'Put a server into MAINT mode'
+  def disable(backend, server)
+    print_result HAStats::Actions::Disable.new(options[:socket]).run(backend, server)
+  end
+
+  desc 'enable [BACKEND] [SERVER]', 'Remove a server from MAINT mode'
+  def enable(backend, server)
+    print_result HAStats::Actions::Enable.new(options[:socket]).run(backend, server)
+  end
+
+  desc 'sess', '[FUTURE] Get current session information'
+  def sess
+    raise NotImplementedError
+  end
+
+  desc 'errors', '[FUTURE] Get current error information'
+  def errors
+    raise NotImplementedError
+  end
+
+  desc 'clear', '[FUTURE] Clear counter maximums (see --all option)'
+  method_option :all, :type => :boolean, :default => false, :desc => "Clear all counters"
+  def clear
+    raise NotImplementedError
+  end
+
+  desc 'set_weight [BACKEND] [SERVER] [WEIGHT]', '[FUTURE] Set a server\'s weight.  Weight is a number or percentage of current weight'
+  def set_weight(backend, server, weight)
+    raise NotImplementedError
+  end
+
+  desc 'get_weight [BACKEND]/[SERVER]', '[FUTURE] Get a server\'s weight'
+  def get_weight(backend, server)
+    raise NotImplementedError
+  end
+
+  protected
+
+  def print_result(result)
+    if options[:json]
+      puts result.to_json
+    else
+      puts result.raw
+    end
+  end
+end
+
+HAStats::Bin.start
+
