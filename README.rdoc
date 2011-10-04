@@ -2,13 +2,30 @@
 
 HAStats communicates with a running HAProxy process through the "stats socket" (not enabled by default).  Through this socket you can query stats, reset counters, change server weightings, put servers in maintenance mode, and more.
 
+=== Setup HAProxy
+
+Add the following to your HAProxy config (see the HAProxy documentation for more details):
+
+  # You can specify lower levels to restrict certain commands -- admin allows everything
+  stats socket /var/run/haproxy.sock level admin
+
 === Using the command line tool
 
-  $ hastats info
-    Name: HAProxy
-    Version: 1.4.8
-    Release_date: 2010/06/16
-    Nbproc: 1
-    Process_num: 1
-    ...
+  $ hastats
+  Tasks:
+    hastats clear                                   # [FUTURE] Clear counter maximums (see --all option)
+    hastats disable [BACKEND] [SERVER]              # Put a server into MAINT mode
+    hastats enable [BACKEND] [SERVER]               # Remove a server from MAINT mode
+    hastats errors                                  # [FUTURE] Get current error information
+    hastats get_weight [BACKEND]/[SERVER]           # [FUTURE] Get a server's weight
+    hastats help [TASK]                             # Describe available tasks or one specific task
+    hastats info                                    # Get information about the HAProxy process
+    hastats sess                                    # [FUTURE] Get current session information
+    hastats set_weight [BACKEND] [SERVER] [WEIGHT]  # [FUTURE] Set a server's weight. Weight is a number or percentage of current weight
+    hastats stat                                    # Get information about all frontends/backends/servers
+
+  Options:
+    -j, [--json]           # Return results in JSON for easy parsing
+    -s, [--socket=SOCKET]  
+                           # Default: /usr/local/var/run/haproxy.sock
 

@@ -6,7 +6,7 @@ require 'thor'
 
 class HAStats::Bin < Thor
   map %w(-h --help) => :help
-  class_option :socket, :aliases => %w(-s), :default => '/usr/local/var/run/haproxy.sock'
+  class_option :socket, :aliases => %w(-s), :default => '/var/run/haproxy.sock'
   class_option :json, :aliases => %w(-j), :type => :boolean, :default => false, :desc => "Return results in JSON for easy parsing"
 
   desc 'info', 'Get information about the HAProxy process'
