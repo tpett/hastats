@@ -9,7 +9,7 @@ class HAStats::Socket
   def run(cmd)
     result = ""
     UNIXSocket.open(socket_addr) do |socket|
-      socket.puts(cmd)
+      socket.write("#{cmd};")
       while out = socket.gets
         result += out
       end
