@@ -6,20 +6,13 @@ class HAStats::Socket
     @socket_addr = socket_addr
   end
 
-  def socket
-    @socket ||= UNIXSocket.new(socket_addr)
-  end
-
-  def reset
-    @socket = nil
-  end
-
   def run(cmd)
-    reset
-    socket.puts(cmd)
     result = ""
-    while out = socket.gets
-      result += out
+    UNIXSocket.open(socket_addr) do |socket|
+      socket.puts(cmd)
+      while out = socket.gets
+        result += out
+      end
     end
     result
   end
